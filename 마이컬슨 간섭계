@@ -1,0 +1,97 @@
+Web VPython 3.2
+
+
+
+R = 1
+a = -10
+c = 11  # 오른쪽 거울 x좌표
+j = 15  #위쪽 스크린 y 좌표
+up_box =box(pos = vec(0,j,0),size = vec(40,0.1,0.1))
+down_box_y = -10
+orginbox = box(pos = vec(0,0,0),opacity =0)
+down_box = box(pos = vec (0,down_box_y,0),size = vec(40,0.1,0.1))
+right_box = box(pos = vec (c,0,0),size = vec(0.1,40,0.1))
+dtheta = 0.001*pi
+k = curve(vec(-20,20,0),vec(20,-20,0))
+b = 0
+u1 = 100
+u2 = 100
+z=0
+t = 1
+dot_yellow_list = []
+dot_blue_list = []
+theta = -1/18*pi
+p1_list = []   # 초록색 파동
+p2_list = []   # 파란색 파동
+p3_list = []   # 빨간색 파동
+p4_list = []   # 노란색 파동
+
+for i in range(300) :
+   theta = -1/18*pi
+   while theta<=1/18*pi :
+      
+       theta += dtheta
+       y = 0
+      
+       if R*cos(theta) + a +R*sin(theta) + b >= 0 : #파란색 파동 리스트 만들기
+          if -R*cos(theta)-a >= down_box_y :
+            p2_list.append(vec(-R*sin(theta)-b,-R*cos(theta)-a,0))
+          elif -R*cos(theta)-a < down_box_y :
+              p2_list.append(vec(-R*sin(theta)-b,2*down_box_y+R*cos(theta)+a,0))
+          
+          
+          
+          
+          if R*cos(theta) + a <= c :   #빨간색 파동 리스트 만들기
+            p1_list.append(vec(R*cos(theta) + a,R*sin(theta) + b,0))
+          elif 2*c -R*cos(theta)-a + R*sin(theta)+b >= 0 :
+            p1_list.append(vec(2*c -R*cos(theta)-a,R*sin(theta)+b,0))
+            
+            
+       elif R*cos(theta) + a+R*sin(theta) + b < 0 :  #초록색 파동 리스트 만들기
+          p3_list.append(vec(R*cos(theta) + a,R*sin(theta) + b,0))
+      
+      
+       if R*cos(theta + 1/2*pi)+a - 2*c + R*sin(theta + 1/2*pi) >= 0 :  #노란색 파동
+         p4_list.append(vec(R*cos(theta + 1/2*pi),a - 2*c + R*sin(theta + 1/2*pi),0))
+         
+         
+       if 2*down_box_y+R*cos(theta)+a <= j and 2*down_box_y+R*cos(theta + dtheta)+a >= j and -R*sin(theta)-b >= 0 :  # 파랑 그래프에 찍을 점 찾기
+         dot_blue_list.append(-R*sin(theta)-b)
+         print('파랑 찍음')
+        
+       if a - 2*c + R*sin(theta + 1/2*pi) >= j and a - 2*c + R*sin(theta + 1/2*pi - dtheta) <= j and R*cos(theta + 1/2*pi) >= 0 :     #  노랑 그래프에 찍을 점 찾기
+         dot_yellow_list.append(R*cos(theta + 1/2*pi))
+         print('노랑 찍음')
+  
+   
+   
+   p1 = curve(pos = p1_list,color = color.red)
+   p3 = curve(pos = p3_list,color = color.green)
+   p2 = curve(pos = p2_list,color = color.blue)
+   p4 = curve(pos = p4_list,color = color.yellow)
+   
+   theta = -1/18*pi
+   
+   rate(100)
+   R += 0.2   #주기
+   p1_list = []
+   p2_list = []
+   p3_list = []
+   p4_list = []
+
+                                    # 그래프 만들기
+f1 = gdots(color = color.yellow)
+for i in dot_yellow_list :
+ z = 0
+ while z <= pi :
+    f1.plot(cos(z)*i,sin(z)*i)
+    f1.plot(-cos(z)*i,-sin(z)*i)
+    z += 0.01*pi
+f1 = gdots(color = color.blue)
+for i in dot_blue_list :
+ z = 0
+ while z <= pi :
+    f1.plot(cos(z)*i,sin(z)*i)
+    f1.plot(-cos(z)*i,-sin(z)*i)
+    z += 0.01*pi
